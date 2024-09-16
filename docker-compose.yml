@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  database:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${dbname}
+      POSTGRES_PASSWORD: ${dbpassword}
+      POSTGRES_DB: ${namedatabase}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
