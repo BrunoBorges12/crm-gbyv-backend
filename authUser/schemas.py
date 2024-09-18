@@ -1,10 +1,12 @@
 from ninja import Schema
 
+
 class BaseUser(Schema):
     first_name: str
     last_name: str
     admin: bool
-        
+
+
 class UserClient(BaseUser):
     enterprise: str
     cpf: str
@@ -16,8 +18,7 @@ class UserClient(BaseUser):
     cep: str
     city: str
     state: str
-    
-class CreateUser(BaseUser):
-    password:str
-    
 
+
+class CreateUser(BaseUser):
+    password: str
