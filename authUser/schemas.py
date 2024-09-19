@@ -1,10 +1,13 @@
 from ninja import Schema
+from pydantic import EmailStr
+from typing import Optional
 
 
 class BaseUser(Schema):
     first_name: str
     last_name: str
-    admin: bool
+    password: str
+    email: EmailStr
 
 
 class UserClient(BaseUser):
@@ -20,5 +23,10 @@ class UserClient(BaseUser):
     state: str
 
 
-class CreateUser(BaseUser):
-    password: str
+class CreateUserAdmin(BaseUser):
+    nivel: str
+
+class DefaultResponse(Schema):
+    status: str  # "success" ou "error"
+    message: str  # Mensagem descritiva
+    data: Optional[dict] = None  # Dados adicionais (opcional)

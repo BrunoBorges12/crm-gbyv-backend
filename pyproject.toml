@@ -12,6 +12,7 @@ black = "^24.8.0"
 python-dotenv = "^1.0.1"
 psycopg2-binary = "^2.9.9"
 django-ninja = "^1.3.0"
+pydantic = {extras = ["email"], version = "^2.9.2"}
 
 
 [build-system]
