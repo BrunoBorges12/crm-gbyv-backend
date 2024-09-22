@@ -1,6 +1,6 @@
 from ninja import NinjaAPI
 from .models import User, UserAdmin
-from .schemas import UserClient, CreateUserAdmin,DefaultResponse
+from .schemas import UserClient, CreateUserAdmin,DefaultResponse,UserLogin
 from ninja.errors import ValidationError
 from ninja.errors import HttpError
 from utils.create_response import create_response
@@ -48,10 +48,11 @@ def create_user_cliente(request, payload: CreateUserAdmin):
 
 
 
-@api.post('/login')
-def login(request,payload):
-    # busca o usuario de acordo com email passado 
-    # verificar se usuario é admin ou client
-    # criar jwt retorna para client consumi esse jwt que contera expiração
-    pass
+@api.post('/login',response={200:DefaultResponse, 401:DefaultResponse})
+def login(request,payload:UserLogin):
+    user:User = User.objects.filter(email =payload.email).first()
+    if user  and user.check_password(payload.password):
+        return create_response(200,'Error','Efetuado o login',data={"email":payload.email})
+    return create_response(401,'Error','Email ou senha icorreto',data=None)
+
    

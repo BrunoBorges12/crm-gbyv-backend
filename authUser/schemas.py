@@ -3,11 +3,15 @@ from pydantic import EmailStr
 from typing import Optional
 
 
-class BaseUser(Schema):
+class UserLogin(Schema):
+    email:str
+    password:str
+    
+    
+class BaseUser(UserLogin):
     first_name: str
     last_name: str
-    password: str
-    email: EmailStr
+    
 
 
 class UserClient(BaseUser):
