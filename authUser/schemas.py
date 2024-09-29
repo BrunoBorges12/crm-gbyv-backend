@@ -4,14 +4,13 @@ from typing import Optional
 
 
 class UserLogin(Schema):
-    email:str
-    password:str
-    
-    
+    email: str
+    password: str
+
+
 class BaseUser(UserLogin):
     first_name: str
     last_name: str
-    
 
 
 class UserClient(BaseUser):
@@ -29,6 +28,7 @@ class UserClient(BaseUser):
 
 class CreateUserAdmin(BaseUser):
     nivel: str
+
 
 class DefaultResponse(Schema):
     status: str  # "success" ou "error"
