@@ -31,8 +31,11 @@ SECRET_KEY = "django-insecure-+2h%-*#t5#209yeff!li$)t$8i5ovi0k0pi5gc!@=czta97s7u
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:3000',
+    
+]
+ 
 # Application definition
 
 INSTALLED_APPS = [
@@ -42,6 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "authUser",
 ]
 
@@ -53,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 ROOT_URLCONF = "crm.urls"
