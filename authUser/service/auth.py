@@ -13,8 +13,9 @@ def create_admin_service(payload) -> UserResponse:
                 last_name=payload.last_name,
                 email=payload.email,
                 password=payload.password,
+                role='admin'
             )
-        user_admin = UserAdmin(nivel=payload.nivel, user=user)
+        user_admin = UserAdmin(business=payload.business, user=user)
         user_admin.save()
         return {"user_id": user.id, "email": user.email}  # Retornando informações úteis
 

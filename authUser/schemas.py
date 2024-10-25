@@ -7,6 +7,9 @@ class UserLogin(Schema):
     email: str
     password: str
 
+class LoginDefault(UserLogin):
+    user_type:str
+
 
 class BaseUser(UserLogin):
     first_name: str
@@ -19,7 +22,7 @@ class UserClient(BaseUser):
     email: str
     tel: str
     website: str
-    positon_enterprise: str = None
+    positon_enterprise: Optional[str] = None
     andress: str
     cep: str
     city: str
@@ -27,7 +30,7 @@ class UserClient(BaseUser):
 
 
 class CreateUserAdmin(BaseUser):
-    nivel: str
+    business: str
 
 
 class DefaultResponse(Schema):

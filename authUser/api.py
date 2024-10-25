@@ -1,6 +1,6 @@
 from ninja import NinjaAPI
 from .models import User, UserAdmin
-from .schemas import UserClient, CreateUserAdmin,DefaultResponse,UserLogin
+from .schemas import UserClient, CreateUserAdmin,DefaultResponse,LoginDefault
 from ninja.errors import ValidationError
 from ninja.errors import HttpError
 from utils.create_response import create_response
@@ -34,7 +34,6 @@ def get_users(request):
 @api.post("/create_user_admin", response={201: DefaultResponse, 403: DefaultResponse})
 def create_admin(request, payload: CreateUserAdmin):
     try:
-        
         if User.objects.filter(email=payload.email).exists():
             return create_response(403,False,'Email já existe',data=None)
         with transaction.atomic():
@@ -47,7 +46,7 @@ def create_admin(request, payload: CreateUserAdmin):
 
 
 @api.post('/login',response={200:DefaultResponse, 401:DefaultResponse})
-def login(request,payload:UserLogin):
+def login(request,payload:LoginDefault):
     user:User = User.objects.filter(email =payload.email).first()
     if user  and user.check_password(payload.password):
         user_data = {

@@ -3,13 +3,14 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user_default(self, email, password, first_name, last_name):
+    def create_user_default(self, email, password, first_name, last_name,role):
         if not email:
             raise ValueError("Por favor insira o email")
         user = self.model(
             email=self.normalize_email(email),
             first_name=first_name,
             last_name=last_name,
+            role=role
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -39,7 +40,7 @@ class UserAdmin(models.Model):
         db_table = "crm_admin_data"
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    nivel = models.CharField(max_length=30)
+    business = models.CharField(max_length=30)
 
 
 class UserClient(models.Model):
