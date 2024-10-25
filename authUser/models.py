@@ -24,6 +24,11 @@ class User(AbstractBaseUser):
     last_name = models.CharField(max_length=30)
     email = models.EmailField(max_length=254, unique=True)
     objects: UserManager = UserManager()
+    ROLE_CHOICES = (
+        ('admin','Admin'),
+        ('client','Client')
+    )
+    role= models.CharField(max_length=6,choices=ROLE_CHOICES,default='client')
     USERNAME_FIELD = (
         "email"  # faz que django entenda que ele é indentificador unico o email
     )
