@@ -47,8 +47,12 @@ def create_admin(request, payload: CreateUserAdmin):
 
 @api.post('/login',response={200:DefaultResponse, 401:DefaultResponse})
 def login(request,payload:LoginDefault):
+    # precisa refactoriza essa parte do login, verifica todos tipos de error e segurança
     user:User = User.objects.filter(email =payload.email).first()
+
     if user  and user.check_password(payload.password):
+        if (payload.user_type == 'admin' and user.role != 'admin') or (payload.user_type == 'client' and user.role != 'client'):
+            return create_response(401, False, 'Email ou senha incorretos', data=None) # faz check em qual login ele esta no client ou no admin
         user_data = {
             "id": user.id,
             "first_name": user.first_name,
