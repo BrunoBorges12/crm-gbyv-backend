@@ -1,6 +1,7 @@
 from ninja import NinjaAPI
-from .models import User, UserAdmin
-from .schemas import UserClient, CreateUserAdmin,DefaultResponse,LoginDefault
+
+from .models import User, UserAdmin,UserClient
+from .schemas import  CreateUserAdmin,DefaultResponse,LoginDefault,CreateUserCLient
 from ninja.errors import ValidationError
 from ninja.errors import HttpError
 from utils.create_response import create_response
@@ -25,10 +26,7 @@ def validation_payload(request, exc: ValidationError):
     )
 
 
-@api.get("/users/", response=UserClient)
-def get_users(request):
-    users = User.objects.all()
-    return users
+
 
 
 @api.post("/create_user_admin", response={201: DefaultResponse, 403: DefaultResponse})
@@ -47,7 +45,7 @@ def create_admin(request, payload: CreateUserAdmin):
 
 @api.post('/login',response={200:DefaultResponse, 401:DefaultResponse})
 def login(request,payload:LoginDefault):
-    # precisa refactoriza essa parte do login, verifica todos tipos de error e segurança
+        # precisa refactoriza essa parte do login, verifica todos tipos de error e segurança
     user:User = User.objects.filter(email =payload.email).first()
 
     if user  and user.check_password(payload.password):
@@ -59,9 +57,37 @@ def login(request,payload:LoginDefault):
             "last_name": user.last_name,
             "email": user.email,
         }
-        access_token_expirer = timedelta(minutes=1)
+        access_token_expirer = timedelta(minutes=20 )
         token = create_access_token(user_data['id'],access_token_expirer,False,True)
         return create_response(200,True,'Efetuado o login',data={"user_data":user_data,"token":token})
     return create_response(401,False,'Email ou senha icorreto',data=None)
+
+@api.post('/create_user_client',response={201: DefaultResponse, 403: DefaultResponse}   )
+def create_user_client(request,payload:CreateUserCLient):
+    try:
+        if User.objects.filter(email=payload.email).exists():
+                    return create_response(403,False,'Email já existe',data=None)
+        user_data = {
+                'email': payload.email,
+                'first_name': payload.first_name,
+                'last_name': payload.last_name,
+                'password': payload.password,
+                'role': 'client'
+            }
+        with  transaction.atomic():         
+            user_default  = User.objects.create_user_default(**user_data)
+            user_client_data ={
+                key:getattr(payload,key)
+                for key  in vars(payload)
+                if key  not in ['password', 'email', 'first_name', 'last_name']
+            }
+            print(user_client_data)
+            user_client = UserClient.objects.create(user=user_default, **user_client_data)
+            user_client.save()
+            return create_response(201,True,'Usuario criado',data=cast(dict,payload.dict()))
+    except Exception as e:
+        error_message = str(e)  
+        raise HttpError(500,error_message)
+        
 
    

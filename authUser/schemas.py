@@ -29,6 +29,9 @@ class UserClient(BaseUser):
     state: str
 
 
+class CreateUserCLient(UserClient):
+    pass
+
 class CreateUserAdmin(BaseUser):
     business: str
 

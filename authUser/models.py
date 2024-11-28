@@ -46,7 +46,6 @@ class UserAdmin(models.Model):
 class UserClient(models.Model):
     class Meta:
         db_table = "crm_client_data"
-
     enterprise = models.CharField(max_length=30)
     cpf = models.CharField(max_length=11)
     tel = models.CharField(max_length=30)
@@ -56,3 +55,5 @@ class UserClient(models.Model):
     cep = models.CharField(max_length=40)
     city = models.CharField(max_length=30)
     state = models.CharField(max_length=30)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
