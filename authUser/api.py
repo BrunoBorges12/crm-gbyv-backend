@@ -57,7 +57,7 @@ def login(request,payload:LoginDefault):
             "last_name": user.last_name,
             "email": user.email,
         }
-        access_token_expirer = timedelta(minutes=20 )
+        access_token_expirer = timedelta(minutes=1 )
         token = create_access_token(user_data['id'],access_token_expirer,False,True)
         return create_response(200,True,'Efetuado o login',data={"user_data":user_data,"token":token})
     return create_response(401,False,'Email ou senha icorreto',data=None)
