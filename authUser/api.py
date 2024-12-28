@@ -10,7 +10,7 @@ from django.db import transaction
 from typing import cast
 from datetime import timedelta
 from .service.security import create_access_token
-api = NinjaAPI()
+api = NinjaAPI(urls_namespace="auth")
 
 # Trazer uma organização melhor? fazer uma função para mensagem padrão?
 @api.exception_handler(ValidationError)
@@ -56,9 +56,10 @@ def login(request,payload:LoginDefault):
             "first_name": user.first_name,
             "last_name": user.last_name,
             "email": user.email,
+            "role":user.role
         }
-        access_token_expirer = timedelta(minutes=1 )
-        token = create_access_token(user_data['id'],access_token_expirer,False,True)
+        access_token_expirer = timedelta(minutes=20 )
+        token = create_access_token(user_data['id'],access_token_expirer,user.role,True)
         return create_response(200,True,'Efetuado o login',data={"user_data":user_data,"token":token})
     return create_response(401,False,'Email ou senha icorreto',data=None)
 
